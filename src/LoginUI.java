@@ -23,112 +23,111 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
-public class LoginUI extends JPanel{
-
-    GameRepository gameRepository = new GameRepository();
-
-    public SaveGamePanel(JFrame frame, GameController gameController) {
-        setLayout(new BorderLayout());
-        setBackground(Color.BLACK);
-
-        JLabel label = new JLabel("Gem spil som: ");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setForeground(new Color(165, 25, 25));
-        label.setFont(new Font(null, 0, 30));
-        label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        add(label, BorderLayout.NORTH);
-
-        //A textfield where you have to enter a name for the game you want to save
-        final JTextField nameSavedGame = new JTextField("Skriv her");
-        nameSavedGame.setBorder(new CompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 30, false), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-
-        add(nameSavedGame, BorderLayout.CENTER);
-        //Can't be left empty, you need to name the game you wnat to save!
-
-        //Separate JPanel with FlowLayout for the buttons to appear next to each other
-        JPanel buttonsPanel = new JPanel() {};
-
-        buttonsPanel.setLayout(new FlowLayout());
-        buttonsPanel.setSize(200, 200);
-        buttonsPanel.setOpaque(false);
-        add(buttonsPanel, BorderLayout.SOUTH);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        Hover hover = new Hover();
-
-        //Saves the game under the name from the text field and closes the window to let the player resume the game
-        JButton saveGame = new JButton("Gem spillet og fortsÃ¦t");
-        saveGame.setBorderPainted(false);
-        saveGame.setContentAreaFilled(false);
-        saveGame.setFocusPainted(false);
-        saveGame.setOpaque(false);
-        saveGame.setForeground(Color.LIGHT_GRAY);
-        saveGame.setFont(new Font(null, 0, 20));
-        saveGame.addMouseListener(hover);
-        saveGame.addActionListener(new ActionListener() {
+public class LoginUI extends JFrame{
+    private JButton loginButton;
+        
+    private JLabel usernameLabel,passwordLabel;
+    
+    private JTextField username;
+    
+    private JPasswordField password;
+    
+    private LoginController loginController;
+    
+    
+      /**  Constructor.  */
+    LoginUI(LoginController controller)
+    {
+        loginController = controller;
+    }{
+          
+    EventQueue.invokeLater(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                GameController savableGameController = gameController.clone();
-                savableGameController.setObserver(null);
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                    ex.printStackTrace();
+                }
 
-                gameRepository.persist(nameSavedGame.getText(), savableGameController);
-
-                frame.setVisible(false);
-                saveGame.setText("Skriv her");
+                JFrame frame = new JFrame("KXT Login");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                JPanel content = new JPanel(new GridBagLayout());
+                //content.setBackground(Color.GREEN);
+                content.setBorder(new EmptyBorder(20, 20, 20, 20));
+                frame.setContentPane(content);
+                frame.add(new LoginPane());
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
+        
+    }
+    
+    
+    
+    
+    /** Return the user name entered by the user. */
+    String getUserName(){
+    return username.getText();
+    }
+  
+    /** Return the password entered by the user. */
+    String getPassword(){
+    return password.getPassword().toString();
+    }
+    
+    
+    
+    public class LoginPane extends JPanel {
 
-        //Closes the window without doing anything and resumes the game..
-        JButton dontSave = new JButton("FortsÃ¦t uden at gemme");
-        dontSave.setBorderPainted(false);
-        dontSave.setContentAreaFilled(false);
-        dontSave.setFocusPainted(false);
-        dontSave.setOpaque(false);
-        dontSave.setForeground(Color.LIGHT_GRAY);
-        dontSave.setFont(new Font(null, 0, 20));
-        dontSave.addMouseListener(hover);
-        dontSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-            }
-        });
+        public LoginPane() {
+            
+            loginButton = new JButton("Login");
+            usernameLabel = new JLabel("Username:");
+            username = new JTextField(15);
+            passwordLabel = new JLabel("Password");
+            password = new JPasswordField(15);
+            loginButton.setActionCommand(LoginController.LOGIN);
+            loginButton.addActionListener(loginController);
+            setLayout(new GridBagLayout());
+            setBorder(new TitledBorder("KXT Login"));
 
-        buttonsPanel.add(saveGame);
-        buttonsPanel.add(dontSave);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            add(usernameLabel, gbc);
+            gbc.gridy++;
+            add(passwordLabel, gbc);
+
+            gbc.gridx++;
+            gbc.gridy = 0;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.weightx = 1;
+            add(username, gbc);
+            gbc.gridy++;
+            add(password, gbc);
+
+            gbc.gridx = 1;
+            gbc.gridy++;
+            gbc.gridwidth = 1;
+            gbc.weightx = 0;
+            gbc.fill = GridBagConstraints.NONE;
+            add(loginButton, gbc);
+            gbc.gridx++;
+            add(new JButton("Cancel"), gbc);
+        }
 
     }
 
-    private class Hover implements MouseListener {
+    
+    
+    
+    
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            JButton button = (JButton) e.getSource();
-
-            button.setForeground(Color.WHITE);
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            JButton button = (JButton) e.getSource();
-
-            button.setForeground(Color.LIGHT_GRAY);
-        }
-    }
 }
