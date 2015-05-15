@@ -30,7 +30,7 @@ public class LoginView extends JFrame{
     
     private JPanel loginPanel;
     
-    private JButton loginButton;
+    private JButton loginButton, cancelButton;
         
     private JLabel usernameLabel,passwordLabel;
     
@@ -69,7 +69,8 @@ public class LoginView extends JFrame{
   
     /** Return the password entered by the user. */
     String getPassword(){
-    return password.getPassword().toString();
+    return new String(password.getPassword());
+    //return password.getPassword().toString();
     }
     
     
@@ -77,6 +78,7 @@ public class LoginView extends JFrame{
     {
             loginPanel = new JPanel();
             loginButton = new JButton("Login");
+            cancelButton = new JButton("Register");
             usernameLabel = new JLabel("Username: ");
             username = new JTextField(15);
             passwordLabel = new JLabel("Password: ");
@@ -107,7 +109,7 @@ public class LoginView extends JFrame{
             gbc.fill = GridBagConstraints.NONE;
             loginPanel.add(loginButton, gbc);
             gbc.gridx++;
-            loginPanel.add(new JButton("Cancel"), gbc);
+            loginPanel.add(cancelButton, gbc);
         return loginPanel;
         
     }
@@ -117,6 +119,12 @@ public class LoginView extends JFrame{
     {
         
         return loginButton;
+        
+    }
+    public JButton getCancelButton()
+    {
+        
+        return cancelButton;
         
     }
     
