@@ -34,6 +34,11 @@ public class KXT {
 			System.out.println("email:\t" + obj.getString("email"));
 			System.out.println();
 		}
+                
+                LoginModel model = new LoginModel();
+                LoginView view = new LoginView(model);
+                LoginController controller = new LoginController(view,model);
+                
 		
 	}
     
