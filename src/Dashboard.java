@@ -63,7 +63,7 @@ public class Dashboard {
         "Company (US)", "Company (World)", "Team", "Will",
         "Birthday Card List", "High School", "Country", "Continent",
         "Planet" };
-        list1 = new JList(categories);
+        list1 = new JList(getEmployees().toArray());
         
         pane1 = new JScrollPane(list1);
         
@@ -105,7 +105,7 @@ public class Dashboard {
     
     
     
-    private void getEmployees()
+    private List getEmployees()
     {
         
         JSONObject employees = Database.query("SELECT * FROM `projektstyring_users` WHERE 1");
@@ -116,7 +116,8 @@ public class Dashboard {
 			JSONObject obj = tmp.getJSONObject(i);
                         list.add( obj.getString("username") );
 		}
-                        System.out.println(list);
+                        //System.out.println(list);
+        return list;
         
         
     }
