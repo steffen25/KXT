@@ -21,8 +21,8 @@ public final class DBConnector {
     private Statement statement;
     public static DBConnector db;
     DBConnector() {
-        String url= "46.30.212.29";
-        String dbName = "todo2";
+        String url= "10.246.16.110";
+        String dbName = "kxt_dk";
         String driver = "com.mysql.jdbc.Driver";
         String userName = "kxt_java_api";
         String password = "KXTJava!2015´";

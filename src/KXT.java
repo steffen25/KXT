@@ -21,8 +21,7 @@ public class KXT {
                 
                 LoginModel model = new LoginModel();
                 LoginView view = new LoginView(model);
-                LoginController controller = new LoginController(view,model);
-                
+                LoginController controller = new LoginController(view,model);                
 		
 	}
     
