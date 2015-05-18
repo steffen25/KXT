@@ -56,6 +56,7 @@ public class LoginView extends JFrame{
                 content.setBorder(new EmptyBorder(20, 20, 20, 20));
                 frame.setContentPane(content);
                 frame.add(loginPanel());
+                frame.getRootPane().setDefaultButton(loginButton);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);

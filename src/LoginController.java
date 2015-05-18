@@ -2,8 +2,11 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -58,9 +61,11 @@ public class LoginController implements ActionListener {
             if (passwordEncryptor.checkPassword(view.getPassword(), encryptedPassword)) {
             System.out.println("Correct password");
             model.setUsername(username);
+            
             JFrame newFrame = new JFrame();
             newFrame.setTitle("KXT - " +model.getUsername());
-            
+            newFrame.setSize(300, 200);
+            newFrame.setLocationRelativeTo(view);
             newFrame.setVisible(true);
             } else {
             System.out.println("Invalid username or password");
