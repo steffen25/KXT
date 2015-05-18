@@ -41,8 +41,6 @@ public class LoginController implements ActionListener {
         if(e.getActionCommand().equals("Login"))
         {
             validateUserCredentials();
-                
-            
         }
         else if (e.getActionCommand().equals("Register"))
         {
@@ -52,14 +50,14 @@ public class LoginController implements ActionListener {
             String encryptedPassword = passwordEncryptor.encryptPassword(view.getPassword());
             String username = view.getUsername();
             //System.out.println("Date:" +sqlToday);
-            JSONObject duplicate = Database.query("SELECT * FROM projektstyring_test WHERE username = '"+view.getUsername()+"'");
+            JSONObject duplicate = Database.query("SELECT * FROM projektstyring_users WHERE username = '"+view.getUsername()+"'");
 
             if(duplicate.getJSONArray("results").length() >= 1)
             {
                 System.out.println("User already exist");
             }
             else if(!username.isEmpty() && !view.getPassword().isEmpty()) {
-                JSONObject sql = Database.query("INSERT into projektstyring_test (username,password,email,reg_date) VALUES('"+username+"','"+encryptedPassword+"','email@email.com','"+sqlToday+"')");
+                JSONObject sql = Database.query("INSERT into projektstyring_users (username,password,email,reg_date) VALUES('"+username+"','"+encryptedPassword+"','email@email.com','"+sqlToday+"')");
                 //System.out.println(sql);
                 System.out.println("User: "+username+" created successfully");
             }
@@ -80,7 +78,7 @@ public class LoginController implements ActionListener {
         String username = view.getUsername();
 
             //check if user exist in out system, if so check if our stored password hash matches the inputted one. 
-            JSONObject userPassword = Database.query("SELECT * FROM projektstyring_test WHERE username = '"+view.getUsername()+"'");
+            JSONObject userPassword = Database.query("SELECT * FROM projektstyring_users WHERE username = '"+view.getUsername()+"'");
             if(userPassword.getJSONArray("results").length() == 0)
             {
                 JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -96,15 +94,17 @@ public class LoginController implements ActionListener {
             model.setUsername(username);
             
             view.getFrame().dispose();
+            /*
             JFrame newFrame = new JFrame();
             newFrame.setTitle("KXT - " +model.getUsername());
             newFrame.setSize(300, 200);
             newFrame.setLocationRelativeTo(null);
             newFrame.setVisible(true);
+            */
             
             
             
-            //new Dashboard(username);
+            new Dashboard(username);
             
             } else {
             JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
