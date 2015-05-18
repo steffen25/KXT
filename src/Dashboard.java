@@ -1,9 +1,11 @@
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.PopupMenu;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -39,6 +41,8 @@ public class Dashboard {
     
     private String username;
     
+    private DefaultListModel model1;
+    
     
     //List<Project> projects = new ArrayList<Project>();
     List<Employee> employees = new ArrayList<Employee>();
@@ -64,13 +68,12 @@ public class Dashboard {
         "Birthday Card List", "High School", "Country", "Continent",
         "Planet" };
         list1 = new JList(getEmployees().toArray());
-        
+        list1.setFixedCellWidth(100);
         pane1 = new JScrollPane(list1);
         
         TitledBorder medarbejdere = BorderFactory.createTitledBorder("Medarbejdere");
         medarbejdere.setTitlePosition(TitledBorder.BELOW_TOP);
         medarbejdere.setTitleJustification(TitledBorder.CENTER);
-        getEmployees();       
         panel1.add(pane1);
         panel1.setBorder(medarbejdere);
         
@@ -88,20 +91,6 @@ public class Dashboard {
         
         return panel2;
     }
-    
-    
-    
-    public static String[] getStringArray(JSONArray jsonArray){
-    String[] stringArray = null;
-    int length = jsonArray.length();
-    if(jsonArray!=null){
-        stringArray = new String[length];
-        for(int i=0;i<length;i++){
-            stringArray[i]= jsonArray.optString(i);
-        }
-    }
-    return stringArray;
-}
     
     
     
