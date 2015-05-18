@@ -9,5 +9,9 @@
  * @author Steffen
  */
 public class Dashboard {
+
+    Dashboard(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

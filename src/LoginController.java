@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.json.JSONArray;
@@ -39,39 +40,8 @@ public class LoginController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals("Login"))
         {
-            String username = view.getUsername();
-            //Database.query("INSERT INTO projektstyring_test (username, password, email) VALUES ('"+view.getUsername()+"','"+view.getPassword()+"','email@email.com')");
-            //System.out.println(result);
-            JSONObject password = Database.query("SELECT * FROM projektstyring_test WHERE username = '"+view.getUsername()+"'");
-            if(password.getJSONArray("results").length() == 0)
-            {
-                System.out.println("Invalid username or password");
-            }
-            else {
+            validateUserCredentials();
                 
-            
-            
-            //System.out.println(password.getJSONArray("results").length());
-            
-            
-            
-            
-            String encryptedPassword = password.getJSONArray("results").getJSONObject(0).getString("password");
-            
-            if (passwordEncryptor.checkPassword(view.getPassword(), encryptedPassword)) {
-            System.out.println("Correct password");
-            model.setUsername(username);
-            
-            JFrame newFrame = new JFrame();
-            newFrame.setTitle("KXT - " +model.getUsername());
-            newFrame.setSize(300, 200);
-            newFrame.setLocationRelativeTo(view);
-            newFrame.setVisible(true);
-            } else {
-            System.out.println("Invalid username or password");
-            }
-            
-            }    
             
         }
         else if (e.getActionCommand().equals("Register"))
@@ -103,6 +73,47 @@ public class LoginController implements ActionListener {
         }
         //if(view.getu)
     }
+
+    private void validateUserCredentials() {
+        
+        
+        String username = view.getUsername();
+
+            //check if user exist in out system, if so check if our stored password hash matches the inputted one. 
+            JSONObject userPassword = Database.query("SELECT * FROM projektstyring_test WHERE username = '"+view.getUsername()+"'");
+            if(userPassword.getJSONArray("results").length() == 0)
+            {
+                JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            // here we check if the password matches
+            else {
+                
+            String encryptedPassword = userPassword.getJSONArray("results").getJSONObject(0).getString("password");
+            
+            if (passwordEncryptor.checkPassword(view.getPassword(), encryptedPassword)) {
+            //System.out.println("Correct password");
+            model.setUsername(username);
+            
+            view.getFrame().dispose();
+            JFrame newFrame = new JFrame();
+            newFrame.setTitle("KXT - " +model.getUsername());
+            newFrame.setSize(300, 200);
+            newFrame.setLocationRelativeTo(null);
+            newFrame.setVisible(true);
+            
+            
+            
+            //new Dashboard(username);
+            
+            } else {
+            JOptionPane.showMessageDialog(null, "Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            }
+        
+    }
+
     
     
     

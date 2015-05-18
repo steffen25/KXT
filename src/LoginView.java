@@ -26,7 +26,10 @@ import java.awt.event.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-public class LoginView extends JFrame{
+public class LoginView {
+    
+    
+    private JFrame frame;
     
     private JPanel loginPanel;
     
@@ -37,7 +40,7 @@ public class LoginView extends JFrame{
     private JTextField username;
 
     private JPasswordField password;
-    
+        
     private LoginModel model;
 
     
@@ -49,7 +52,7 @@ public class LoginView extends JFrame{
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                     ex.printStackTrace();
                 }
-                JFrame frame = new JFrame("KXT Login");
+                frame = new JFrame("KXT Login");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 JPanel content = new JPanel(new GridBagLayout());
                 //content.setBackground(Color.GREEN);
@@ -128,6 +131,11 @@ public class LoginView extends JFrame{
         return cancelButton;
         
     }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+    
     
     
   
