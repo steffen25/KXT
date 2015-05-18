@@ -53,7 +53,6 @@ public class Dashboard {
                 frame.add(rightPanel(),BorderLayout.EAST);
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-                System.out.println(getEmployees());
     }
 
     private JPanel rightPanel() {
@@ -71,9 +70,10 @@ public class Dashboard {
         TitledBorder medarbejdere = BorderFactory.createTitledBorder("Medarbejdere");
         medarbejdere.setTitlePosition(TitledBorder.BELOW_TOP);
         medarbejdere.setTitleJustification(TitledBorder.CENTER);
-               
+        getEmployees();       
         panel1.add(pane1);
         panel1.setBorder(medarbejdere);
+        
         return panel1;
     }
     
@@ -105,16 +105,18 @@ public class Dashboard {
     
     
     
-    private Object[] getEmployees()
+    private void getEmployees()
     {
         
-        JSONObject employees = Database.query("SELECT * FROM projektstyring_users WHERE username = 'hej'");
-        JSONArray arr = new JSONArray(employees);
+        JSONObject employees = Database.query("SELECT * FROM `projektstyring_users` WHERE 1");
+        //Reads the results from the query
+	JSONArray tmp = employees.getJSONArray("results");
         List<String> list = new ArrayList<String>();
-        for(int i = 0; i < arr.length(); i++){
-        list.add(arr.getJSONObject(i).getString("username"));
-        }
-        return list.toArray();
+        		for(int i = 0; i < tmp.length(); i++){
+			JSONObject obj = tmp.getJSONObject(i);
+                        list.add( obj.getString("username") );
+		}
+                        System.out.println(list);
         
         
     }
