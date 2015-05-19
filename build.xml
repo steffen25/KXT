@@ -70,4 +70,15 @@
     nbproject/build-impl.xml file. 
 
     -->
+<target name="-post-jar">
+    <jar jarfile="dist/KXT.jar">
+        <zipfileset src="${dist.jar}" excludes="META-INF/*" />
+        <zipfileset src="jasypt-1.9.2.jar" excludes="META-INF/*" />
+        <zipfileset src="json-20141113.jar" excludes="META-INF/*" />
+        <zipfileset src="KXTMySqlDriver.jar" excludes="META-INF/*" />
+        <manifest>
+            <attribute name="Main-Class" value="KXT"/>
+        </manifest>
+    </jar>
+</target>
 </project>
