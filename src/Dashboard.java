@@ -3,15 +3,14 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,7 +38,7 @@ public class Dashboard {
     private String username;
 
     private DefaultListModel model1;
-    
+
     private DefaultTableModel model2;
 
     private JMenuBar menuBar;
@@ -47,7 +46,7 @@ public class Dashboard {
     private JMenu menu, submenu;
 
     private JMenuItem menuItem;
-    
+
     private JTable mainTable;
 
 
@@ -61,8 +60,8 @@ public class Dashboard {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1024, 768);
         frame.add(mainMenu(), BorderLayout.NORTH);
-        frame.add(leftPanel(),BorderLayout.WEST);
-        frame.add(rightPanel(),BorderLayout.EAST);
+        frame.add(leftPanel(), BorderLayout.WEST);
+        frame.add(rightPanel(), BorderLayout.EAST);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
@@ -80,8 +79,6 @@ public class Dashboard {
         panel1.add(jList());
         return panel1;
     }
-
-
 
 
     private JPanel leftPanel() {
@@ -107,7 +104,6 @@ public class Dashboard {
 
         return panel2;
     }
-
 
 
     private JMenuBar mainMenu() {
@@ -143,28 +139,25 @@ public class Dashboard {
         return pane1;
 
     }
-    
+
     private JScrollPane jTable() {
-        
-        
+
+
         model2 = new DefaultTableModel();
-        
+
         mainTable = new JTable();
-        
+
         getProjects();
-        
+
         mainTable.setModel(model2);
-        
-        
+
 
         pane2 = new JScrollPane(mainTable);
-        
-        
+
+
         return pane2;
-        
+
     }
-
-
 
 
     private void getEmployees() {
@@ -180,27 +173,42 @@ public class Dashboard {
 
 
     }
-    
-    
 
 
     private void getProjects() {
         JSONObject employees = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
         //Reads the results from the query
         JSONArray tmp = employees.getJSONArray("results");
-        
-        int numberOfCols = tmp.getJSONObject(0).length();
-        
+
+        String id;
+        String name;
+        String status;
+        String phases;
+        String tasks;
+
+        model2.addColumn("id");
+        model2.addColumn("name");
+        model2.addColumn("status");
+        model2.addColumn("phases");
+        model2.addColumn("tasks");
+
+        //int numberOfCols = tmp.getJSONObject(0).length();
         for (int i = 0; i < tmp.length(); i++) {
             JSONObject obj = tmp.getJSONObject(i);
-            // sæt coloum headers her
 
+            id = obj.getString("id");
+            name = obj.getString("name");
+            status = obj.getString("status");
+            phases = obj.getString("phases");
+            tasks = obj.getString("tasks");
+            Object[] rowData = {id, name, phases, status, tasks};
+
+            model2.addRow(rowData);
         }
-        
-        
-        model2.addColumn(numberOfCols);
-        
-        
+
+
+        //  model2.addRow(rowData);
+
 
     }
 
