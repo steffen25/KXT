@@ -8,8 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,19 +32,23 @@ public class Dashboard {
 
     private JButton but1, but2;
 
-    private JList list1, list2;
+    private JList list1;
 
     private JScrollPane pane1, pane2;
 
     private String username;
 
-    private DefaultListModel model1, model2;
+    private DefaultListModel model1;
+    
+    private DefaultTableModel model2;
 
     private JMenuBar menuBar;
 
     private JMenu menu, submenu;
 
     private JMenuItem menuItem;
+    
+    private JTable mainTable;
 
 
     List<Project> projects = new ArrayList<Project>();
@@ -55,22 +61,10 @@ public class Dashboard {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1024, 768);
         frame.add(mainMenu(), BorderLayout.NORTH);
-        frame.add(mainPanel());
+        frame.add(leftPanel(),BorderLayout.WEST);
+        frame.add(rightPanel(),BorderLayout.EAST);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-    }
-
-
-    private JPanel mainPanel() {
-        mainpanel = new JPanel();
-        mainpanel.setBackground(Color.YELLOW);
-        mainpanel.setLayout(new BorderLayout());
-        mainpanel.add(rightPanel(), BorderLayout.EAST);
-        mainpanel.add(centerPanel(), BorderLayout.CENTER);
-        mainpanel.add(leftPanel2(), BorderLayout.WEST);
-
-        return mainpanel;
 
     }
 
@@ -87,16 +81,7 @@ public class Dashboard {
         return panel1;
     }
 
-    private JPanel leftPanel2() {
-        JPanel jPanel = new JPanel();
-        TitledBorder WHATNAME = BorderFactory.createTitledBorder("Hvad skal der være her?");
-        WHATNAME.setTitlePosition(TitledBorder.BELOW_TOP);
-        WHATNAME.setTitleJustification(TitledBorder.CENTER);
-        jPanel.setPreferredSize(new Dimension(600, 500));
-        jPanel.setBorder(WHATNAME);
-        //jPanel.add(projectList());
-        return jPanel;
-    }
+
 
 
     private JPanel leftPanel() {
@@ -115,33 +100,14 @@ public class Dashboard {
         panel2 = new JPanel(new GridLayout(N, N));
         panel2.setPreferredSize(new Dimension(800, 4 * 100));
 
+        panel2.add(jTable());
 
-        for (int row = 0; row < N; row++) {
-            for (int col = 0; col < 3; col++) {
-
-                JButton b = new JButton(tmp.getJSONObject(0).getString("name"));
-                b.setMargin(new Insets(0, 0, 0, 0));
-                b.setBorder(null);
-                //b.setPreferredSize(new Dimension(40, 40));
-                panel2.add(b).setLocation(row, col);
-            }
-        }
         panel2.setBorder(projects);
 
 
         return panel2;
     }
 
-    private JPanel centerPanel() {
-        panel3 = new JPanel();
-        panel3.setLayout(new BorderLayout());
-        TitledBorder projects = BorderFactory.createTitledBorder("Projekter");
-        projects.setTitlePosition(TitledBorder.BELOW_TOP);
-        projects.setTitleJustification(TitledBorder.CENTER);
-        panel3.setBorder(projects);
-        panel3.add(projectList());
-        return panel3;
-    }
 
 
     private JMenuBar mainMenu() {
@@ -177,16 +143,28 @@ public class Dashboard {
         return pane1;
 
     }
-
-    private JScrollPane projectList() {
-        list2 = new JList();
-        model2 = new DefaultListModel();
-        list2.setModel(model2);
+    
+    private JScrollPane jTable() {
+        
+        
+        model2 = new DefaultTableModel();
+        
+        mainTable = new JTable();
+        
         getProjects();
-        list2.setFixedCellWidth(150);
-        pane2 = new JScrollPane(list2);
+        
+        mainTable.setModel(model2);
+        
+        
+
+        pane2 = new JScrollPane(mainTable);
+        
+        
         return pane2;
+        
     }
+
+
 
 
     private void getEmployees() {
@@ -202,16 +180,27 @@ public class Dashboard {
 
 
     }
+    
+    
 
 
     private void getProjects() {
-        JSONObject projects = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
-        JSONArray projectsarray = projects.getJSONArray("results");
-        for (int i = 0; i < projectsarray.length(); i++) {
-            JSONObject obj = projectsarray.getJSONObject(i);
-            model2.addElement(obj.getString("name"));
+        JSONObject employees = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
+        //Reads the results from the query
+        JSONArray tmp = employees.getJSONArray("results");
+        
+        int numberOfCols = tmp.getJSONObject(0).length();
+        
+        for (int i = 0; i < tmp.length(); i++) {
+            JSONObject obj = tmp.getJSONObject(i);
+            // sæt coloum headers her
 
         }
+        
+        
+        model2.addColumn(numberOfCols);
+        
+        
 
     }
 
