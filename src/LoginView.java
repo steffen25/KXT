@@ -53,6 +53,7 @@ public class LoginView {
                     ex.printStackTrace();
                 }
                 frame = new JFrame("KXT Login");
+                frame.setIconImage(new ImageIcon(getClass().getResource("/icon_kxt.png")).getImage());
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 JPanel content = new JPanel(new GridBagLayout());
                 //content.setBackground(Color.GREEN);
