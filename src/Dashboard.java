@@ -282,6 +282,18 @@ public class Dashboard {
                     projekt.setTitleJustification(TitledBorder.CENTER);
                     panel2.setBorder(projekt);
                     panel2.add(but1, BorderLayout.SOUTH);
+                    JList test1 = new JList();
+                    JList test2 = new JList();
+                    JList test3 = new JList();
+                    test1.setPreferredSize(new Dimension(200, 100));
+                    test2.setPreferredSize(new Dimension(200, 100));
+                    test3.setPreferredSize(new Dimension(200, 100));
+                    panel2.add(test1, BorderLayout.WEST);
+                    panel2.add(test2, BorderLayout.CENTER);
+                    panel2.add(test3, BorderLayout.EAST);
+                    test1.setBorder(projekt);
+                    test2.setBorder(projekt);
+                    test3.setBorder(projekt);
                     
                     
 
@@ -305,6 +317,7 @@ public class Dashboard {
                     projekt.setTitlePosition(TitledBorder.BELOW_TOP);
                     projekt.setTitleJustification(TitledBorder.CENTER);
                     panel2.add(jTable());
+                    
                     panel2.setBorder(projekt);
                   } 
             }
