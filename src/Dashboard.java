@@ -95,7 +95,7 @@ public class Dashboard {
         ;
 
         panel2 = new JPanel(new GridLayout(N, N));
-        panel2.setPreferredSize(new Dimension(800, 4 * 100));
+        panel2.setPreferredSize(new Dimension(845, 4 * 100));
 
         panel2.add(jTable());
 
@@ -143,7 +143,13 @@ public class Dashboard {
     private JScrollPane jTable() {
 
 
-        model2 = new DefaultTableModel();
+        model2 = new DefaultTableModel(){
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+};
+        
 
         mainTable = new JTable();
 
@@ -176,32 +182,34 @@ public class Dashboard {
 
 
     private void getProjects() {
-        JSONObject employees = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
+        
+        JSONObject projects = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
         //Reads the results from the query
-        JSONArray tmp = employees.getJSONArray("results");
+        JSONArray tmp = projects.getJSONArray("results");
 
         String id;
         String name;
         String status;
         String phases;
         String tasks;
-
-        model2.addColumn("id");
-        model2.addColumn("name");
-        model2.addColumn("status");
-        model2.addColumn("phases");
-        model2.addColumn("tasks");
-
+        
+        
+        addColumnHeaders();
+        
         //int numberOfCols = tmp.getJSONObject(0).length();
         for (int i = 0; i < tmp.length(); i++) {
             JSONObject obj = tmp.getJSONObject(i);
-
+           
             id = obj.getString("id");
             name = obj.getString("name");
             status = obj.getString("status");
             phases = obj.getString("phases");
             tasks = obj.getString("tasks");
+            
+            //name,id,phases,tasks,status
+            
             Object[] rowData = {id, name, phases, status, tasks};
+            
 
             model2.addRow(rowData);
         }
@@ -222,6 +230,21 @@ public class Dashboard {
             inititals += m.group().trim();
         }
         return inititals.toUpperCase();
+    }
+
+    private void addColumnHeaders() {
+        
+        JSONObject projects = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
+        
+        //Reads the results from the query
+        JSONArray tmp = projects.getJSONArray("results");
+        
+        for(int i = 0; i < tmp.getJSONObject(0).length(); i++)
+        {
+        model2.addColumn(tmp.getJSONObject(0).names().get(i));
+        }
+        
+        
     }
 
 }
