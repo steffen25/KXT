@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
 /*
@@ -130,7 +132,8 @@ public class Dashboard {
         if (result == JOptionPane.OK_OPTION && !navn.getText().isEmpty() && !faser.getText().isEmpty() && !opgaver.getText().isEmpty()) {
             //JSONObject duplicate = Database.query("SELECT * FROM projektstyring_users WHERE username = '"+view.getUsername()+"'");
             JSONObject sql = Database.query("INSERT into projektstyring_projects (name,status,phases,tasks) VALUES('"+navn.getText()+"','"+combo.getSelectedIndex()+"','"+faser.getText()+"','"+opgaver.getText()+"')");
-       
+            model2.setRowCount(0);
+            getProjects();
             
         } else {
                 JOptionPane.showMessageDialog(null, "Navn, faser eller opgaver er tom.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -244,17 +247,32 @@ public class Dashboard {
     }
 };
         
+        
+        
 
         mainTable = new JTable();
 
-        getProjects();
+        
+        addColumnHeaders();
 
         mainTable.setModel(model2);
-
+        
+        getProjects();
 
         pane2 = new JScrollPane(mainTable);
 
+        mainTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (mainTable.getSelectedRow() > -1) {
+            // print first column value from selected row
+            JFrame test = new JFrame();
+            test.setVisible(true);
+            test.setTitle(username);
+        }
+            }
+        });
         return pane2;
 
     }
@@ -288,7 +306,7 @@ public class Dashboard {
         String tasks;
         
         
-        addColumnHeaders();
+        
         
         //int numberOfCols = tmp.getJSONObject(0).length();
         for (int i = 0; i < tmp.length(); i++) {
