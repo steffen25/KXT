@@ -43,9 +43,9 @@ public class Dashboard {
 
     private JMenuBar menuBar;
 
-    private JMenu menu, submenu;
+    private JMenu menu, projectMenu, opgaveMenu, submenu;
 
-    private JMenuItem menuItem;
+    private JMenuItem UserMenuItem, ProjectMenuItem1,ProjectMenuItem2,ProjectMenuItem3, opgMenuItem1,opgMenuItem2,opgMenuItem3;
 
     private JTable mainTable;
 
@@ -111,21 +111,72 @@ public class Dashboard {
         menuBar = new JMenuBar();
         //Build the first menu.
         menu = new JMenu(username);
+
         menu.setMnemonic(KeyEvent.VK_A);
         menu.getAccessibleContext().setAccessibleDescription(
                 "The only menu in this program that has menu items");
         menuBar.add(menu);
 
-        menuItem = new JMenuItem("A text-only menu item",
+        UserMenuItem = new JMenuItem("A text-only menu item",
                 KeyEvent.VK_T);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        UserMenuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
-        menuItem.getAccessibleContext().setAccessibleDescription(
+        UserMenuItem.getAccessibleContext().setAccessibleDescription(
                 "This doesn't really do anything");
-        menu.add(menuItem);
+        menu.add(UserMenuItem);
+
+
+
+
+
+        projectMenu = new JMenu("Projekt");
+        projectMenu.setMnemonic(KeyEvent.VK_A);
+        projectMenu.getAccessibleContext().setAccessibleDescription("Sådan min ven");
+        menuBar.add(projectMenu);
+        ProjectMenuItem1 = new JMenuItem("Opret Projekt");
+
+        ProjectMenuItem1.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_1, ActionEvent.ALT_MASK));
+        ProjectMenuItem1.getAccessibleContext().setAccessibleDescription(
+                "This doesn't really do anything");
+        ProjectMenuItem2 = new JMenuItem("Redigere Projekt");
+        ProjectMenuItem3 = new JMenuItem("Slet Projekt");
+
+
+        ProjectMenuItem1.addActionListener(null);
+        ProjectMenuItem2.addActionListener(null);
+        ProjectMenuItem3.addActionListener(null);
+
+
+        projectMenu.add(ProjectMenuItem1);
+        projectMenu.add(ProjectMenuItem2);
+        projectMenu.add(ProjectMenuItem3);
+
+
+        opgaveMenu = new JMenu("Opgave");
+        opgaveMenu.setMnemonic(KeyEvent.VK_A);
+        opgaveMenu.getAccessibleContext().setAccessibleDescription("Sådan min ven");
+        menuBar.add(opgaveMenu);
+        opgMenuItem1 = new JMenuItem("Opret Opgave",
+                KeyEvent.VK_T);
+        opgMenuItem2 = new JMenuItem("Redigere Opgave");
+        opgMenuItem3 = new JMenuItem("Slet Projekt");
+
+        opgMenuItem1.addActionListener(null);
+        opgMenuItem2.addActionListener(null);
+        opgMenuItem3.addActionListener(null);
+
+
+        opgaveMenu.add(opgMenuItem1);
+        opgaveMenu.add(opgMenuItem2);
+        opgaveMenu.add(opgMenuItem3);
+
         return menuBar;
 
     }
+
+
+
 
 
     private JScrollPane jList() {
@@ -208,7 +259,7 @@ public class Dashboard {
             
             //name,id,phases,tasks,status
             
-            Object[] rowData = {id, name, phases, status, tasks};
+            Object[] rowData = {name, id, phases, tasks,status};
             
 
             model2.addRow(rowData);
