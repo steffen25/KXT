@@ -99,7 +99,7 @@ public class Dashboard {
         projects.setTitleJustification(TitledBorder.CENTER);
         ;
 
-        panel2 = new JPanel(new GridLayout(N, N));
+        panel2 = new JPanel(new BorderLayout());
 
         panel2.setPreferredSize(new Dimension(845, 4 * 100));
 
@@ -261,21 +261,30 @@ public class Dashboard {
         getProjects();
 
         pane2 = new JScrollPane(mainTable);
-
+        but1 = new JButton("Tilbage");
+        
         mainTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (mainTable.getSelectedRow() > -1) {
-                    panel2.removeAll();
-                    //panel2.setBorder(null);
                     
+                    
+                    int row = mainTable.getSelectedRow();
+                    //int col = mainTable.getSelectedColumn();
+                    panel2.removeAll();
+                    panel2.revalidate();
                     panel2.repaint();
                     
-                    TitledBorder projekt = BorderFactory.createTitledBorder("test");
-        projekt.setTitlePosition(TitledBorder.BELOW_TOP);
-        projekt.setTitleJustification(TitledBorder.CENTER);
-        panel2.setBorder(projekt);
+                    
+                    TitledBorder projekt = BorderFactory.createTitledBorder("Projekt: "+mainTable.getValueAt(row, 0).toString()+ " Projekt ID: " +mainTable.getValueAt(row, 1));
+                    projekt.setTitlePosition(TitledBorder.BELOW_TOP);
+                    projekt.setTitleJustification(TitledBorder.CENTER);
+                    panel2.setBorder(projekt);
+                    panel2.add(but1, BorderLayout.SOUTH);
+                    
+                    
+
                     
             // print first column value from selected row
                     
@@ -283,6 +292,24 @@ public class Dashboard {
         }
             }
         });
+        but1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("Tilbage"))
+                  {
+                    panel2.removeAll();
+                    panel2.revalidate();
+                    panel2.repaint();
+                    TitledBorder projekt = BorderFactory.createTitledBorder("Projekter");
+                    projekt.setTitlePosition(TitledBorder.BELOW_TOP);
+                    projekt.setTitleJustification(TitledBorder.CENTER);
+                    panel2.add(jTable());
+                    panel2.setBorder(projekt);
+                  } 
+            }
+        });
+        
         return pane2;
 
     }
