@@ -100,6 +100,7 @@ public class Dashboard {
         ;
 
         panel2 = new JPanel(new GridLayout(N, N));
+
         panel2.setPreferredSize(new Dimension(845, 4 * 100));
 
         panel2.add(jTable());
@@ -266,9 +267,18 @@ public class Dashboard {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (mainTable.getSelectedRow() > -1) {
+                    panel2.removeAll();
+                    //panel2.setBorder(null);
+                    
+                    panel2.repaint();
+                    
+                    TitledBorder projekt = BorderFactory.createTitledBorder("test");
+        projekt.setTitlePosition(TitledBorder.BELOW_TOP);
+        projekt.setTitleJustification(TitledBorder.CENTER);
+        panel2.setBorder(projekt);
+                    
             // print first column value from selected row
-                    but1 = new JButton("TEST");
-            leftPanel().add(but1);
+                    
             //leftPanel().add(list2);
         }
             }
