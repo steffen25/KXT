@@ -6,11 +6,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.table.AbstractTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -57,6 +59,7 @@ public class Dashboard {
 
         this.username = username;
         frame = new JFrame("KXT - Projektstyring");
+        frame.setIconImage(new ImageIcon(getClass().getResource("/icon_kxt.png")).getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1024, 768);
         frame.add(mainMenu(), BorderLayout.NORTH);
@@ -104,6 +107,36 @@ public class Dashboard {
 
         return panel2;
     }
+    
+    
+    private void createNewProject() {
+        String[] status = {"Tilbud", "Ekstern", "Intern"};
+        JComboBox combo = new JComboBox(status);
+        JTextField navn = new JTextField();
+        JTextField faser = new JTextField();
+        JTextField opgaver = new JTextField();
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        
+        panel.add(new JLabel("Navn:"));
+        panel.add(navn);
+        panel.add(new JLabel("Faser:"));
+        panel.add(faser);
+        panel.add(new JLabel("Opgaver:"));
+        panel.add(opgaver);
+        panel.add(new JLabel("Status:"));
+        panel.add(combo);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Opret nyt projekt",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION && !navn.getText().isEmpty() && !faser.getText().isEmpty() && !opgaver.getText().isEmpty()) {
+            //JSONObject duplicate = Database.query("SELECT * FROM projektstyring_users WHERE username = '"+view.getUsername()+"'");
+            JSONObject sql = Database.query("INSERT into projektstyring_projects (name,status,phases,tasks) VALUES('"+navn.getText()+"','"+combo.getSelectedIndex()+"','"+faser.getText()+"','"+opgaver.getText()+"')");
+       
+            
+        } else {
+                JOptionPane.showMessageDialog(null, "Navn, faser eller opgaver er tom.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
 
 
     private JMenuBar mainMenu() {
@@ -143,7 +176,13 @@ public class Dashboard {
         ProjectMenuItem3 = new JMenuItem("Slet Projekt");
 
 
-        ProjectMenuItem1.addActionListener(null);
+        ProjectMenuItem1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               createNewProject(); 
+            }
+        });
         ProjectMenuItem2.addActionListener(null);
         ProjectMenuItem3.addActionListener(null);
 
@@ -174,6 +213,10 @@ public class Dashboard {
         return menuBar;
 
     }
+
+    
+    
+    
 
 
 
