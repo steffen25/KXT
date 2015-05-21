@@ -267,9 +267,9 @@ public class Dashboard {
             public void valueChanged(ListSelectionEvent e) {
                 if (mainTable.getSelectedRow() > -1) {
             // print first column value from selected row
-            JFrame test = new JFrame();
-            test.setVisible(true);
-            test.setTitle(username);
+                    but1 = new JButton("TEST");
+            leftPanel().add(but1);
+            //leftPanel().add(list2);
         }
             }
         });
