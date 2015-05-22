@@ -326,38 +326,52 @@ public class Dashboard {
                     //Reads the results from the query
                     JSONArray tmp = phases.getJSONArray("results");
                     
+                    
+                    
+                    
                     int antalJlister = tmp.length();
                     
                     JList jlister[] = new JList[antalJlister];
                     
                     DefaultListModel jlistmodeller[] = new DefaultListModel[antalJlister];
                     
-                    panel2.setLayout(new GridLayout(antalJlister,2));
+                    panel2.setLayout(new FlowLayout());
                     panel2.setBackground(Color.GREEN);
+                    
+                    
+                    
                     
                     for (int i = 0; i < antalJlister; i++)
                     {
-                        
+                    
+                        TitledBorder fasenavn = BorderFactory.createTitledBorder(tmp.getJSONObject(i).getString("phase"));
+                            fasenavn.setTitlePosition(TitledBorder.BELOW_TOP);
+                            fasenavn.setTitleJustification(TitledBorder.CENTER);
                         //System.out.println(obj);
                         jlister[i] = new JList();
-                        
+                        jlister[i].setBorder(fasenavn);
                         jlistmodeller[i] = new DefaultListModel();
                         
                         jlister[i].setModel(jlistmodeller[i]);
                         
                         //jlistmodeller[i].add(i, obj.getString("phase"));
                         
-                        
+                        jlister[i].setFixedCellWidth(250);
                         jlister[i].setBackground(Color.red);
+                        //
+                        
+                        JScrollPane jlistscroll = new JScrollPane(jlister[i]);
+
+                        
+                        
+                        jlistmodeller[i].addElement("test");
+                        panel2.add(jlistscroll);
                         
                         
                         
-                        //jlistmodeller[i].add(i, "test");
+                        //panel2.add(test);
                         
-                        
-                        panel2.add(jlister[i]);
-                        
-                        System.out.println("i= "+i+" "+panel2.getComponent(i));
+                        //System.out.println("i= "+i+" "+panel2.getComponent(i));
                         //panel2.add(jlister[i]);
                         
                         
