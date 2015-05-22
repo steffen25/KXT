@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,13 +34,13 @@ public class Dashboard {
 
     private JButton but1, but2;
 
-    private JList list1;
+    private JList list1, list2;
 
     private JScrollPane pane1, pane2;
 
     private String username;
 
-    private DefaultListModel model1;
+    private DefaultListModel model1,model3,model4;
 
     private DefaultTableModel model2;
 
@@ -50,7 +51,6 @@ public class Dashboard {
     private JMenuItem UserMenuItem, ProjectMenuItem1, ProjectMenuItem2, ProjectMenuItem3, opgMenuItem1, opgMenuItem2, opgMenuItem3;
 
     private JTable mainTable;
-
 
     //List<Project> projects = new ArrayList<Project>();
     //List<Employee> employees = new ArrayList<Employee>();
@@ -296,6 +296,7 @@ public class Dashboard {
 
         pane2 = new JScrollPane(mainTable);
         but1 = new JButton("Tilbage");
+        but2 = new JButton("Test");
 
         mainTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -309,25 +310,65 @@ public class Dashboard {
                     panel2.removeAll();
                     panel2.revalidate();
                     panel2.repaint();
-
+                    
 
                     TitledBorder projekt = BorderFactory.createTitledBorder("Projekt: " + mainTable.getValueAt(row, 0).toString() + " Projekt ID: " + mainTable.getValueAt(row, 1));
                     projekt.setTitlePosition(TitledBorder.BELOW_TOP);
                     projekt.setTitleJustification(TitledBorder.CENTER);
                     panel2.setBorder(projekt);
-                    panel2.add(but1, BorderLayout.NORTH);
-                    JList test1 = new JList();
-                    JList test2 = new JList();
-                    JList test3 = new JList();
-                    test1.setPreferredSize(new Dimension(200, 100));
-                    test2.setPreferredSize(new Dimension(200, 100));
-                    test3.setPreferredSize(new Dimension(200, 100));
-                    panel2.add(test1, BorderLayout.WEST);
-                    panel2.add(test2, BorderLayout.CENTER);
-                    panel2.add(test3, BorderLayout.EAST);
-                    test1.setBorder(projekt);
-                    test2.setBorder(projekt);
-                    test3.setBorder(projekt);
+                    
+                    
+                    
+                    
+                    
+                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phases WHERE pid = '"+mainTable.getValueAt(row, 1)+"'");
+                    
+                    //Reads the results from the query
+                    JSONArray tmp = phases.getJSONArray("results");
+                    
+                    int antalJlister = tmp.length();
+                    
+                    JList jlister[] = new JList[antalJlister];
+                    
+                    DefaultListModel jlistmodeller[] = new DefaultListModel[antalJlister];
+                    
+                    panel2.setLayout(new GridLayout(antalJlister,2));
+                    panel2.setBackground(Color.GREEN);
+                    
+                    for (int i = 0; i < antalJlister; i++)
+                    {
+                        
+                        //System.out.println(obj);
+                        jlister[i] = new JList();
+                        
+                        jlistmodeller[i] = new DefaultListModel();
+                        
+                        jlister[i].setModel(jlistmodeller[i]);
+                        
+                        //jlistmodeller[i].add(i, obj.getString("phase"));
+                        
+                        
+                        jlister[i].setBackground(Color.red);
+                        
+                        
+                        
+                        //jlistmodeller[i].add(i, "test");
+                        
+                        
+                        panel2.add(jlister[i]);
+                        
+                        System.out.println("i= "+i+" "+panel2.getComponent(i));
+                        //panel2.add(jlister[i]);
+                        
+                        
+                        
+                        
+                    }
+                    
+                    
+                    
+                    //System.out.println(tmp.length());
+                    //model3.addElement("test");
 
 
                     // print first column value from selected row
@@ -344,6 +385,7 @@ public class Dashboard {
                     panel2.removeAll();
                     panel2.revalidate();
                     panel2.repaint();
+                    panel2.setLayout(new BorderLayout());
                     TitledBorder projekt = BorderFactory.createTitledBorder("Projekter");
                     projekt.setTitlePosition(TitledBorder.BELOW_TOP);
                     projekt.setTitleJustification(TitledBorder.CENTER);
