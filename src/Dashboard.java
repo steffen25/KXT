@@ -324,7 +324,7 @@ public class Dashboard {
                     
                     
                     
-                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phases WHERE pid = '"+mainTable.getValueAt(row, 1)+"'");
+                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE pid = '"+mainTable.getValueAt(row, 1)+"'");
                     
                     //Reads the results from the query
                     JSONArray tmp = phases.getJSONArray("results");
@@ -454,26 +454,24 @@ public class Dashboard {
 
     private void getProjects() {
 
-        JSONObject projects = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
+        JSONObject projects = Database.query("SELECT * FROM `projektstyring_project1` WHERE 1");
         //Reads the results from the query
         JSONArray tmp = projects.getJSONArray("results");
 
         String id;
         String name;
         String status;
-        String phases;
-        String tasks;
+
 
         //int numberOfCols = tmp.getJSONObject(0).length();
         for (int i = 0; i < tmp.length(); i++) {
             JSONObject obj = tmp.getJSONObject(i);
-            id = obj.getString("id");
+            id = obj.getString("p_id");
             name = obj.getString("name");
             status = obj.getString("status");
-            phases = obj.getString("phases");
-            tasks = obj.getString("tasks");
+
             //name,id,phases,tasks,status
-            Object[] rowData = {name, id, phases, tasks, status};
+            Object[] rowData = {name, id, status};
 
 
             model2.addRow(rowData);
@@ -495,7 +493,7 @@ public class Dashboard {
 
     private void addColumnHeaders() {
 
-        JSONObject projects = Database.query("SELECT * FROM `projektstyring_projects` WHERE 1");
+        JSONObject projects = Database.query("SELECT * FROM `projektstyring_project1` WHERE 1");
         //Reads the results from the query
         JSONArray tmp = projects.getJSONArray("results");
         for (int i = 0; i < tmp.getJSONObject(0).length(); i++) {
