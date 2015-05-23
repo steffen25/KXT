@@ -28,7 +28,7 @@ public class Dashboard {
 
     private JFrame frame;
 
-    private JPanel mainpanel, panel1, panel2, panel3;
+    private JPanel mainpanel, panel1, panel2, panel3, panel4;
 
     private JLabel label1, label2;
 
@@ -296,8 +296,10 @@ public class Dashboard {
 
         pane2 = new JScrollPane(mainTable);
         but1 = new JButton("Tilbage");
-        but2 = new JButton("Test");
-
+        panel4 = new JPanel(new GridLayout(0,3));
+        panel4.setBackground(Color.BLUE);
+        //panel4.setPreferredSize(new Dimension(800,800));
+        
         mainTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -310,6 +312,7 @@ public class Dashboard {
                     panel2.removeAll();
                     panel2.revalidate();
                     panel2.repaint();
+                    
                     
 
                     TitledBorder projekt = BorderFactory.createTitledBorder("Projekt: " + mainTable.getValueAt(row, 0).toString() + " Projekt ID: " + mainTable.getValueAt(row, 1));
@@ -335,8 +338,12 @@ public class Dashboard {
                     
                     DefaultListModel jlistmodeller[] = new DefaultListModel[antalJlister];
                     
-                    panel2.setLayout(new FlowLayout());
+                    panel2.setLayout(new BorderLayout());
                     panel2.setBackground(Color.GREEN);
+                    
+                    
+                    
+                    
                     
                     
                     
@@ -344,28 +351,34 @@ public class Dashboard {
                     for (int i = 0; i < antalJlister; i++)
                     {
                     
-                        TitledBorder fasenavn = BorderFactory.createTitledBorder(tmp.getJSONObject(i).getString("phase"));
+                        TitledBorder fasenavn = BorderFactory.createTitledBorder("Fase: "+tmp.getJSONObject(i).getString("phase"));
                             fasenavn.setTitlePosition(TitledBorder.BELOW_TOP);
                             fasenavn.setTitleJustification(TitledBorder.CENTER);
                         //System.out.println(obj);
                         jlister[i] = new JList();
-                        jlister[i].setBorder(fasenavn);
+                        
+                        
+                        //jlister[i].setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
                         jlistmodeller[i] = new DefaultListModel();
+                        
+                        
                         
                         jlister[i].setModel(jlistmodeller[i]);
                         
                         //jlistmodeller[i].add(i, obj.getString("phase"));
                         
-                        jlister[i].setFixedCellWidth(250);
-                        jlister[i].setBackground(Color.red);
+                        //jlister[i].setFixedCellWidth(250);
+                        //jlister[i].setBackground(Color.red);
                         //
                         
                         JScrollPane jlistscroll = new JScrollPane(jlister[i]);
+                        jlistscroll.setBorder(fasenavn);
 
                         
                         
                         jlistmodeller[i].addElement("test");
-                        panel2.add(jlistscroll);
+                        
+                        panel4.add(jlistscroll);
                         
                         
                         
@@ -378,6 +391,11 @@ public class Dashboard {
                         
                         
                     }
+                    
+                    
+                    JScrollPane scroll = new JScrollPane(panel4);
+                    panel2.add(scroll);
+                    panel2.add(but1, BorderLayout.SOUTH);
                     
                     
                     
@@ -396,6 +414,7 @@ public class Dashboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand().equals("Tilbage")) {
+                    
                     panel2.removeAll();
                     panel2.revalidate();
                     panel2.repaint();
@@ -413,6 +432,9 @@ public class Dashboard {
         return pane2;
 
     }
+    
+    
+
 
 
     private void getEmployees() {
