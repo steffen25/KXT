@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +27,7 @@ public class Dashboard {
 
     private JFrame frame;
 
-    private JPanel mainpanel, panel1, panel2, panel3, panel4;
+    private JPanel panel1, panel2, panel3, panel4;
 
     private JLabel label1, label2;
 
@@ -40,15 +39,15 @@ public class Dashboard {
 
     private String username;
 
-    private DefaultListModel model1,model3,model4;
+    private DefaultListModel model1, model3, model4;
 
     private DefaultTableModel model2;
 
     private JMenuBar menuBar;
 
-    private JMenu menu, projectMenu, opgaveMenu, submenu;
+    private JMenu menu, projectMenu, opgaveMenu, FaseMenu;
 
-    private JMenuItem UserMenuItem, ProjectMenuItem1, ProjectMenuItem2, ProjectMenuItem3, opgMenuItem1, opgMenuItem2, opgMenuItem3;
+    private JMenuItem UserMenuItem, ProjectMenuItem1, ProjectMenuItem2, ProjectMenuItem3, opgMenuItem1, opgMenuItem2, opgMenuItem3, faseMenuItem1,faseMenuItem2,faseMenuItem3;
 
     private JTable mainTable;
 
@@ -126,11 +125,12 @@ public class Dashboard {
         panel.add(opgaver);
         panel.add(new JLabel("Status:"));
         panel.add(combo);
+
         int result = JOptionPane.showConfirmDialog(null, panel, "Opret nyt projekt",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION && !navn.getText().isEmpty() && !faser.getText().isEmpty() && !opgaver.getText().isEmpty()) {
             //JSONObject duplicate = Database.query("SELECT * FROM projektstyring_users WHERE username = '"+view.getUsername()+"'");
-            JSONObject sql = Database.query("INSERT into projektstyring_projects (name,status,phases,tasks) VALUES('" + navn.getText() + "','" + combo.getSelectedIndex() + "','" + faser.getText() + "','" + opgaver.getText() + "')");
+            JSONObject sql = Database.query("INSERT into projektstyring_project1 (name,status,phases,tasks) VALUES('" + navn.getText() + "','" + combo.getSelectedIndex() + "','" + faser.getText() + "','" + opgaver.getText() + "')");
             model2.setRowCount(0);
             getProjects();
 
@@ -150,14 +150,6 @@ public class Dashboard {
         JTextField kommentar = new JTextField();
         JPanel panel = new JPanel(new GridLayout(0, 1));
 
-        /*
-     Fra task classen
-    public String title;
-    public String description;
-    public String phase;
-    public ArrayList responsible;
-    public ArrayList  comments;
-         */
 
         panel.add(new JLabel("Titel:"));
         panel.add(title);
@@ -208,8 +200,8 @@ public class Dashboard {
         projectMenu.setMnemonic(KeyEvent.VK_A);
         projectMenu.getAccessibleContext().setAccessibleDescription("Sådan min ven");
         menuBar.add(projectMenu);
-        ProjectMenuItem1 = new JMenuItem("Opret Projekt");
 
+        ProjectMenuItem1 = new JMenuItem("Opret Projekt");
         ProjectMenuItem1.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
         ProjectMenuItem1.getAccessibleContext().setAccessibleDescription(
@@ -227,7 +219,6 @@ public class Dashboard {
         });
         ProjectMenuItem2.addActionListener(null);
         ProjectMenuItem3.addActionListener(null);
-
 
         projectMenu.add(ProjectMenuItem1);
         projectMenu.add(ProjectMenuItem2);
@@ -257,6 +248,27 @@ public class Dashboard {
         opgaveMenu.add(opgMenuItem2);
         opgaveMenu.add(opgMenuItem3);
 
+
+
+        FaseMenu = new JMenu("Fase");
+        FaseMenu.setMnemonic(KeyEvent.VK_A);
+        FaseMenu.getAccessibleContext().setAccessibleDescription("Sådan min ven");
+        menuBar.add(FaseMenu);
+
+         faseMenuItem1 = new JMenuItem("Opret fase",
+                KeyEvent.VK_T);
+        faseMenuItem2 = new JMenuItem("Rediger fase");
+        faseMenuItem3 = new JMenuItem("slet fase");
+
+        faseMenuItem1.addActionListener(null);
+        faseMenuItem2.addActionListener(null);
+        faseMenuItem3.addActionListener(null);
+
+        FaseMenu.add(faseMenuItem1);
+        FaseMenu.add(faseMenuItem2);
+        FaseMenu.add(faseMenuItem3);
+
+
         return menuBar;
 
     }
@@ -283,10 +295,7 @@ public class Dashboard {
                 return false;
             }
         };
-
-
         mainTable = new JTable();
-
 
         addColumnHeaders();
 
@@ -296,10 +305,9 @@ public class Dashboard {
 
         pane2 = new JScrollPane(mainTable);
         but1 = new JButton("Tilbage");
-        panel4 = new JPanel(new GridLayout(0,3));
+        panel4 = new JPanel(new GridLayout(0, 3));
         panel4.setBackground(Color.BLUE);
-        //panel4.setPreferredSize(new Dimension(800,800));
-        
+
         mainTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -308,102 +316,59 @@ public class Dashboard {
 
 
                     int row = mainTable.getSelectedRow();
-                    //int col = mainTable.getSelectedColumn();
                     panel2.removeAll();
                     panel2.revalidate();
                     panel2.repaint();
-                    
-                    
 
-                    TitledBorder projekt = BorderFactory.createTitledBorder("Projekt: " + mainTable.getValueAt(row, 0).toString() + " Projekt ID: " + mainTable.getValueAt(row, 1));
+                    TitledBorder projekt = BorderFactory.createTitledBorder("Projektnavn: " + mainTable.getValueAt(row, 0).toString() + " Projekt ID: " + mainTable.getValueAt(row, 1));
                     projekt.setTitlePosition(TitledBorder.BELOW_TOP);
                     projekt.setTitleJustification(TitledBorder.CENTER);
                     panel2.setBorder(projekt);
-                    
-                    
-                    
-                    
-                    
-                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE p_id = '"+mainTable.getValueAt(row, 1)+"'");
+
+
+                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE p_id = '" + mainTable.getValueAt(row, 1) + "'");
                     //Reads the results from the query
                     JSONArray tmp = phases.getJSONArray("results");
-                    
-                    
-                    
-                    
+
+
                     int antalJlister = tmp.length();
-                    
                     JList jlister[] = new JList[antalJlister];
-                    
                     DefaultListModel jlistmodeller[] = new DefaultListModel[antalJlister];
-                    
+
                     panel2.setLayout(new BorderLayout());
                     panel2.setBackground(Color.GREEN);
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    for (int i = 0; i < antalJlister; i++)
-                    {
-                    
-                        TitledBorder fasenavn = BorderFactory.createTitledBorder("Fase: "+tmp.getJSONObject(i).getString("phase"));
-                            fasenavn.setTitlePosition(TitledBorder.BELOW_TOP);
-                            fasenavn.setTitleJustification(TitledBorder.CENTER);
-                        //System.out.println(obj);
+
+
+                    for (int i = 0; i < antalJlister; i++) {
+
+                        TitledBorder fasenavn = BorderFactory.createTitledBorder("Fase: " + tmp.getJSONObject(i).getString("phase"));
+
+
+                        fasenavn.setTitlePosition(TitledBorder.BELOW_TOP);
+                        fasenavn.setTitleJustification(TitledBorder.CENTER);
                         jlister[i] = new JList();
-                        
-                        
-                        //jlister[i].setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
                         jlistmodeller[i] = new DefaultListModel();
-                        
-                        
-                        
                         jlister[i].setModel(jlistmodeller[i]);
-                        
                         //jlistmodeller[i].add(i, obj.getString("phase"));
-                        
-                        //jlister[i].setFixedCellWidth(250);
-                        //jlister[i].setBackground(Color.red);
-                        //
-                        
+
                         JScrollPane jlistscroll = new JScrollPane(jlister[i]);
                         jlistscroll.setBorder(fasenavn);
 
-                        
-                        
-                        jlistmodeller[i].addElement("test");
-                        
+                        jlistmodeller[i].addElement(tmp.getJSONObject(i).getString("phase"));
+
                         panel4.add(jlistscroll);
-                        
-                        
-                        
-                        //panel2.add(test);
-                        
-                        //System.out.println("i= "+i+" "+panel2.getComponent(i));
-                        //panel2.add(jlister[i]);
-                        
-                        
-                        
-                        
+
                     }
-                    
-                    
+
+
                     JScrollPane scroll = new JScrollPane(panel4);
                     panel2.add(scroll);
                     panel2.add(but1, BorderLayout.SOUTH);
-                    
-                    
-                    
+
                     //System.out.println(tmp.length());
                     //model3.addElement("test");
-
-
                     // print first column value from selected row
-
                     //leftPanel().add(list2);
                 }
             }
@@ -413,7 +378,7 @@ public class Dashboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand().equals("Tilbage")) {
-                    
+
                     panel2.removeAll();
                     panel2.revalidate();
                     panel2.repaint();
@@ -431,9 +396,6 @@ public class Dashboard {
         return pane2;
 
     }
-    
-    
-
 
 
     private void getEmployees() {
@@ -446,8 +408,6 @@ public class Dashboard {
             model1.addElement(obj.getString("username") /*+ "(" + getInitials(obj.getString("firstname"),obj.getString("lastname")) + ")"*/);
 
         }
-
-
     }
 
 
@@ -469,13 +429,9 @@ public class Dashboard {
             name = obj.getString("name");
             status = obj.getString("status");
 
-            //name,id,phases,tasks,status
             Object[] rowData = {name, id, status};
-
-
             model2.addRow(rowData);
         }
-        //  model2.addRow(rowData);
     }
 
 
