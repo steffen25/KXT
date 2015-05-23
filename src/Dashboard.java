@@ -324,8 +324,7 @@ public class Dashboard {
                     
                     
                     
-                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE pid = '"+mainTable.getValueAt(row, 1)+"'");
-                    
+                    JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE p_id = '"+mainTable.getValueAt(row, 1)+"'");
                     //Reads the results from the query
                     JSONArray tmp = phases.getJSONArray("results");
                     
@@ -439,7 +438,7 @@ public class Dashboard {
 
     private void getEmployees() {
 
-        JSONObject employees = Database.query("SELECT * FROM `projektstyring_users` WHERE 1");
+        JSONObject employees = Database.query("SELECT * FROM `projektstyring_user1` WHERE 1");
         //Reads the results from the query
         JSONArray tmp = employees.getJSONArray("results");
         for (int i = 0; i < tmp.length(); i++) {
