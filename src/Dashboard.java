@@ -51,6 +51,8 @@ public class Dashboard {
     private JMenuItem UserMenuItem, ProjectMenuItem1, ProjectMenuItem2, ProjectMenuItem3, opgMenuItem1, opgMenuItem2, opgMenuItem3;
 
     private JTable mainTable;
+    
+    
 
     //List<Project> projects = new ArrayList<Project>();
     //List<Employee> employees = new ArrayList<Employee>();
@@ -445,10 +447,10 @@ public class Dashboard {
     
     
     
-    private void fetchPhasesToPanel()
+    public void fetchPhasesToPanel()
     {
-        int row = mainTable.getSelectedRow();
-        JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE p_id = '" + mainTable.getValueAt(row, 1) + "'");
+                int row = mainTable.getSelectedRow();
+                JSONObject phases = Database.query("SELECT * FROM projektstyring_phase1 WHERE p_id = '" + mainTable.getValueAt(row, 1) + "'");
                     //Reads the results from the query
                     JSONArray tmp = phases.getJSONArray("results");
                     
@@ -458,11 +460,12 @@ public class Dashboard {
                     int antalJlister = tmp.length();
                     JList jlister[] = new JList[antalJlister];
                     DefaultListModel jlistmodeller[] = new DefaultListModel[antalJlister];
-        for (int i = 0; i < antalJlister; i++) {
+                    
+                    for (int i = 0; i < antalJlister; i++) {
                         
-                        
-
-                        TitledBorder fasenavn = BorderFactory.createTitledBorder("Fase: " + tmp.getJSONObject(i).getString("phase"));
+                    
+                    
+                        TitledBorder fasenavn = BorderFactory.createTitledBorder("Fase: " + tmp.getJSONObject(i).getString("phase") + " Fase ID:" +tmp.getJSONObject(i).getString("ph_id"));
 
 
                         fasenavn.setTitlePosition(TitledBorder.BELOW_TOP);
@@ -471,18 +474,35 @@ public class Dashboard {
 
                         jlistmodeller[i] = new DefaultListModel();
                         jlister[i].setModel(jlistmodeller[i]);
-                        //jlistmodeller[i].add(i, obj.getString("phase"));
 
                         JScrollPane jlistscroll = new JScrollPane(jlister[i]);
                         jlistscroll.setBorder(fasenavn);
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                                
 
-                        jlistmodeller[i].addElement(tmp.getJSONObject(i).getString("phase"));
-
+                        
+                        
+                        
                         panel4.add(jlistscroll);
 
                     }
-    }
+                    
+                    
 
+    }
+    
+    
+
+    
+    
+    
 
 
     private void getEmployees() {
@@ -492,12 +512,13 @@ public class Dashboard {
         JSONArray tmp = employees.getJSONArray("results");
         for (int i = 0; i < tmp.length(); i++) {
             JSONObject obj = tmp.getJSONObject(i);
-            model1.addElement(obj.getString("username") /*+ "(" + getInitials(obj.getString("firstname"),obj.getString("lastname")) + ")"*/);
+            model1.addElement(obj.getString("username") + "(" + getInitials(obj.getString("firstname"),obj.getString("lastname")) + ")");
 
         }
 
 
     }
+    
 
 
     private void getProjects() {
