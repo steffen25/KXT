@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by danniwu on 11/05/15.
  */
+//ny
 public class LoginController implements ActionListener {
 
     BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
